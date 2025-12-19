@@ -1,0 +1,98 @@
+@import "tailwindcss/preflight";
+
+/* Tailwind utilities */
+@tailwind utilities;
+
+/* -------------------- Base Styles -------------------- */
+body {
+  @apply p-8 min-h-screen font-mono text-[#3d3a32] bg-gradient-to-b from-[#e8f0f2] to-[#f9f4e9];
+}
+
+/* -------------------- Container -------------------- */
+.container {
+  @apply max-w-3xl mx-auto bg-[#fff9f2] rounded-2xl shadow-lg p-8;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+/* -------------------- Header -------------------- */
+header {
+  @apply text-center mb-8;
+}
+
+header h1 {
+  @apply text-5xl text-[#7f634a] mb-2;
+  font-family: 'Segoe Script', cursive, serif;
+  letter-spacing: 0.1em;
+  text-shadow: 1px 1px 0 #d0b7a1;
+}
+
+header p {
+  @apply italic text-[#a48a72] mt-2;
+}
+
+/* -------------------- Recipe Card -------------------- */
+.recipe-card {
+  @apply bg-[#faf1e6] border-2 border-[#d4b996] rounded-xl p-7 mb-8 transition-shadow duration-300;
+  border-image: linear-gradient(45deg, #d4b996 0%, #f7e9d7 100%);
+  border-image-slice: 1;
+}
+
+.recipe-card:hover {
+  @apply shadow-2xl;
+}
+
+.recipe-card h2 {
+  @apply text-3xl mb-2 text-[#926f52];
+  font-family: 'Segoe Script', cursive, serif;
+}
+
+.ingredients,
+.instructions {
+  @apply mt-4 leading-relaxed text-[#5a4b3c];
+}
+
+.ingredients ul {
+  @apply list-square pl-6;
+}
+
+.instructions ol {
+  @apply list-decimal pl-6 space-y-1;
+}
+
+/* -------------------- Buttons -------------------- */
+.btn-primary {
+  @apply inline-block mt-6 bg-[#a97c50] text-[#fff9f2] px-6 py-2 rounded-xl font-semibold cursor-pointer shadow-md text-center no-underline;
+}
+
+.btn-primary:hover {
+  @apply bg-[#7f634a] shadow-sm;
+}
+
+/* -------------------- Responsive -------------------- */
+@media (max-width: 640px) {
+  body {
+    @apply p-4;
+  }
+
+  .container {
+    @apply p-6;
+  }
+
+  header h1 {
+    @apply text-3xl;
+  }
+
+  .recipe-card h2 {
+    @apply text-2xl;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 text-sm;
+  }
+}
+
+/* -------------------- Animations -------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
