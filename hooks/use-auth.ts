@@ -5,8 +5,19 @@ import { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
+interface Profile {
+  id: string
+  username: string
+  avatar_url: string | null
+  bio: string | null
+  role: 'user' | 'admin'
+  created_at: string
+  updated_at: string
+}
+
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
@@ -16,14 +27,39 @@ export function useAuth() {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
+      
+      // Récupérer le profil si l'utilisateur existe
+      if (user) {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        
+        setProfile(profileData)
+      }
+      
       setLoading(false)
     }
 
     getUser()
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null)
+      
+      if (session?.user) {
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+        
+        setProfile(profileData)
+      } else {
+        setProfile(null)
+      }
+      
       setLoading(false)
     })
 
@@ -32,29 +68,16 @@ export function useAuth() {
 
   const signUp = async (email: string, password: string, username: string) => {
     const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
+      email,
+      password,
+      options: {
         data: {
-            username,
+          username,
         },
-        },
+      },
     })
 
     if (error) throw error
-
-    // Créer le profil
-    if (data.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          id: data.user.id,
-          username,
-        })
-
-      if (profileError) throw profileError
-    }
-
     return data
   }
 
@@ -82,6 +105,7 @@ export function useAuth() {
 
   return {
     user,
+    profile,
     loading,
     signUp,
     signIn,

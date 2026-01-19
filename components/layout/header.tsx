@@ -16,11 +16,13 @@ import { Moon, Sun, LogOut, User, ChefHat } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
 export function Header() {
-  const { user, signOut, loading } = useAuth()
+  const { user, profile, signOut, loading } = useAuth() // Ajout de profile
   const { theme, setTheme } = useTheme()
 
-  const getInitials = (email: string) => {
-    return email.substring(0, 2).toUpperCase()
+  const getInitials = (username?: string | null, email?: string) => {
+    if (username) return username.substring(0, 2).toUpperCase()
+    if (email) return email.substring(0, 2).toUpperCase()
+    return 'U'
   }
 
   return (
@@ -77,9 +79,9 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="" alt={user.email || ''} />
+                    <AvatarImage src={profile?.avatar_url || ''} alt={profile?.username || ''} />
                     <AvatarFallback>
-                      {getInitials(user.email || 'U')}
+                      {getInitials(profile?.username, user.email)}
                     </AvatarFallback>
                   </Avatar>
                 </Button>
@@ -87,9 +89,11 @@ export function Header() {
               <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user.email}</p>
+                    <p className="text-sm font-medium leading-none">
+                      {profile?.username || 'Utilisateur'}
+                    </p>
                     <p className="text-xs leading-none text-muted-foreground">
-                      {user.user_metadata?.username || 'Utilisateur'}
+                      {user.email}
                     </p>
                   </div>
                 </DropdownMenuLabel>
