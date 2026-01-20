@@ -104,8 +104,52 @@ export function useRecipes() {
     }
   }
 
+  const getRecipes = async (status: 'approved' | 'pending' | 'all' = 'approved') => {
+  setLoading(true)
+  
+    try {
+      let query = supabase
+        .from('recipes')
+        .select(`
+          *,
+          profiles:user_id (
+            username,
+            avatar_url
+          ),
+          ingredients (
+            id,
+            name,
+            quantity,
+            order_index
+          ),
+          steps (
+            id,
+            description,
+            order_index
+          )
+        `)
+        .order('created_at', { ascending: false })
+
+      if (status !== 'all') {
+        query = query.eq('status', status)
+      }
+
+      const { data, error } = await query
+
+      if (error) throw error
+
+      return data
+    } catch (error) {
+      console.error('Error fetching recipes:', error)
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return {
     createRecipe,
+    getRecipes,
     loading,
   }
 }
