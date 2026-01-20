@@ -39,9 +39,9 @@ export function RecipeForm() {
     defaultValues: {
       title: '',
       description: '',
-      prep_time: 0,
-      cook_time: 0,
-      servings: 0,
+      prep_time: undefined,
+      cook_time: undefined,
+      servings: undefined,
       difficulty: undefined,
       ingredients: [{ name: '', quantity: '' }],
       steps: [{ description: '' }],
@@ -88,7 +88,6 @@ export function RecipeForm() {
       
       setSuccess(true)
       
-      // Rediriger après 2 secondes
       setTimeout(() => {
         router.push('/')
         router.refresh()
@@ -181,7 +180,7 @@ export function RecipeForm() {
               <FormControl>
                 <Textarea
                   placeholder="Décrivez votre recette inspirée du monde de Chihiro..."
-                  className="min-h-[100px]"
+                  className="min-h-25"
                   {...field}
                 />
               </FormControl>
@@ -202,9 +201,8 @@ export function RecipeForm() {
                   <Input
                     type="number"
                     placeholder="30"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}
                     value={field.value || ''}
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -222,9 +220,8 @@ export function RecipeForm() {
                   <Input
                     type="number"
                     placeholder="20"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}
                     value={field.value || ''}
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -242,9 +239,8 @@ export function RecipeForm() {
                   <Input
                     type="number"
                     placeholder="4"
-                    {...field}
-                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : 0)}
                     value={field.value || ''}
+                    onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -260,7 +256,7 @@ export function RecipeForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Difficulté</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez une difficulté" />
@@ -363,7 +359,7 @@ export function RecipeForm() {
                     <FormControl>
                       <Textarea
                         placeholder="Décrivez cette étape..."
-                        className="min-h-[80px]"
+                        className="min-h-20"
                         {...field}
                       />
                     </FormControl>
