@@ -147,9 +147,57 @@ export function useRecipes() {
     }
   }
 
+  const getRecipeById = async (id: string) => {
+  setLoading(true)
+  
+    try {
+      const { data, error } = await supabase
+        .from('recipes')
+        .select(`
+          *,
+          profiles:user_id (
+            id,
+            username,
+            avatar_url
+          ),
+          ingredients (
+            id,
+            name,
+            quantity,
+            order_index
+          ),
+          steps (
+            id,
+            description,
+            order_index
+          )
+        `)
+        .eq('id', id)
+        .single()
+
+      if (error) throw error
+
+      // Trier les ingrédients et étapes par order_index
+      if (data.ingredients) {
+        data.ingredients.sort((a: any, b: any) => a.order_index - b.order_index)
+      }
+      if (data.steps) {
+        data.steps.sort((a: any, b: any) => a.order_index - b.order_index)
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error fetching recipe:', error)
+      throw error
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return {
     createRecipe,
     getRecipes,
+    getRecipeById,
     loading,
   }
 }
