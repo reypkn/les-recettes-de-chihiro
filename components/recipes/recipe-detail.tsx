@@ -9,6 +9,8 @@ import { Clock, Users, ChefHat, Calendar } from 'lucide-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/fr'
+import { LikeButton } from './like-button'
+import { Button } from '@/components/ui/button'
 
 dayjs.extend(relativeTime)
 dayjs.locale('fr')
@@ -144,7 +146,13 @@ export function RecipeDetail({ recipe }: RecipeDetailProps) {
             </div>
           )}
         </div>
+
+        <div className="flex gap-4">
+          <LikeButton recipeId={recipe.id} />
+        </div>
       </div>
+
+      
 
       <Separator />
 

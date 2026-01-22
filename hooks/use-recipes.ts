@@ -105,8 +105,8 @@ export function useRecipes() {
   }
 
   const getRecipes = async (status: 'approved' | 'pending' | 'all' = 'approved') => {
-  setLoading(true)
-  
+    setLoading(true)
+    
     try {
       let query = supabase
         .from('recipes')
@@ -126,6 +126,9 @@ export function useRecipes() {
             id,
             description,
             order_index
+          ),
+          likes (
+            id
           )
         `)
         .order('created_at', { ascending: false })
@@ -138,7 +141,13 @@ export function useRecipes() {
 
       if (error) throw error
 
-      return data
+      // Ajouter le count des likes
+      const recipesWithCounts = data?.map(recipe => ({
+        ...recipe,
+        likesCount: recipe.likes?.length || 0
+      }))
+
+      return recipesWithCounts
     } catch (error) {
       console.error('Error fetching recipes:', error)
       throw error

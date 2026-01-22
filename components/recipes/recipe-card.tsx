@@ -9,6 +9,7 @@ import { Clock, Users, ChefHat, Heart, MessageCircle } from 'lucide-react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import 'dayjs/locale/fr'
+import { LikeButton } from './like-button'
 
 dayjs.extend(relativeTime)
 dayjs.locale('fr')
@@ -93,34 +94,31 @@ export function RecipeCard({ recipe, likesCount = 0, commentsCount = 0 }: Recipe
         </CardContent>
 
         <CardFooter className="pt-3 border-t flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Avatar className="h-6 w-6">
-              <AvatarImage src={recipe.profiles?.avatar_url || ''} />
-              <AvatarFallback className="text-xs">
-                {recipe.profiles?.username?.substring(0, 2).toUpperCase() || 'UN'}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex flex-col">
-              <span className="text-xs font-medium">
-                {recipe.profiles?.username || 'Anonyme'}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {dayjs(recipe.created_at).fromNow()}
-              </span>
-            </div>
-          </div>
+  <div className="flex items-center gap-2">
+    <Avatar className="h-6 w-6">
+      <AvatarImage src={recipe.profiles?.avatar_url || ''} />
+      <AvatarFallback className="text-xs">
+        {recipe.profiles?.username?.substring(0, 2).toUpperCase() || 'UN'}
+      </AvatarFallback>
+    </Avatar>
+    <div className="flex flex-col">
+      <span className="text-xs font-medium">
+        {recipe.profiles?.username || 'Anonyme'}
+      </span>
+      <span className="text-xs text-muted-foreground">
+        {dayjs(recipe.created_at).fromNow()}
+      </span>
+    </div>
+  </div>
 
-          <div className="flex items-center gap-3 text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Heart className="h-4 w-4" />
-              <span className="text-xs">{likesCount}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <MessageCircle className="h-4 w-4" />
-              <span className="text-xs">{commentsCount}</span>
-            </div>
-          </div>
-        </CardFooter>
+  <div className="flex items-center gap-3">
+    <LikeButton recipeId={recipe.id} variant="icon" />
+    <div className="flex items-center gap-1 text-muted-foreground">
+      <MessageCircle className="h-4 w-4" />
+      <span className="text-xs">{commentsCount}</span>
+    </div>
+  </div>
+</CardFooter>
       </Card>
     </Link>
   )
