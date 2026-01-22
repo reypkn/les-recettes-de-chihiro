@@ -7,6 +7,7 @@ import { useRecipes } from '@/hooks/use-recipes'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import Link from 'next/link'
+import { CommentsSection } from '@/components/recipes/comments-section'
 
 export default function RecipeDetailPage() {
   const params = useParams()
@@ -34,7 +35,7 @@ export default function RecipeDetailPage() {
 
   if (loading) {
     return (
-      <div className="container py-12 flex items-center justify-center min-h-[400px]">
+      <div className="container py-12 flex items-center justify-center min-h-100">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     )
@@ -72,6 +73,9 @@ export default function RecipeDetailPage() {
 
         {/* Détail de la recette */}
         <RecipeDetail recipe={recipe} />
+
+        {/* Section commentaires */}
+        <CommentsSection recipeId={recipe.id} />
       </div>
     </div>
   )

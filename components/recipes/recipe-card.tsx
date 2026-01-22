@@ -25,6 +25,7 @@ interface RecipeCardProps {
     servings?: number | null
     difficulty?: 'facile' | 'moyen' | 'difficile' | null
     created_at: string
+    commentsCount?: number
     profiles: {
       username: string
       avatar_url?: string | null
@@ -40,7 +41,7 @@ const difficultyColors = {
   difficile: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
 }
 
-export function RecipeCard({ recipe, likesCount = 0, commentsCount = 0 }: RecipeCardProps) {
+export function RecipeCard({ recipe }: RecipeCardProps) {
   const totalTime = (recipe.prep_time || 0) + (recipe.cook_time || 0)
 
   return (
@@ -115,7 +116,7 @@ export function RecipeCard({ recipe, likesCount = 0, commentsCount = 0 }: Recipe
     <LikeButton recipeId={recipe.id} variant="icon" />
     <div className="flex items-center gap-1 text-muted-foreground">
       <MessageCircle className="h-4 w-4" />
-      <span className="text-xs">{commentsCount}</span>
+      <span className="text-xs">{recipe.commentsCount || 0}</span>
     </div>
   </div>
 </CardFooter>

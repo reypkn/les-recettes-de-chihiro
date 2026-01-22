@@ -129,6 +129,9 @@ export function useRecipes() {
           ),
           likes (
             id
+          ),
+          comments (
+            id
           )
         `)
         .order('created_at', { ascending: false })
@@ -141,10 +144,11 @@ export function useRecipes() {
 
       if (error) throw error
 
-      // Ajouter le count des likes
+      // Ajouter le count des likes et commentaires
       const recipesWithCounts = data?.map(recipe => ({
         ...recipe,
-        likesCount: recipe.likes?.length || 0
+        likesCount: recipe.likes?.length || 0,
+        commentsCount: recipe.comments?.length || 0
       }))
 
       return recipesWithCounts
